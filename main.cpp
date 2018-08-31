@@ -13,15 +13,15 @@ struct A
         std::cout << "A{const A&}" << std::endl;
     }
 
+        A(A&&)
+    {
+        std::cout << "A{A&&}" << std::endl;
+    }
+
     A& operator=(const A&)
     {
         std::cout << "operator=(const A&)" << std::endl;
         return *this;
-    }
-
-    A(A&&)
-    {
-        std::cout << "A{A&&}" << std::endl;
     }
 
     A& operator=(A&&)
@@ -35,35 +35,67 @@ struct A
         std::cout << "~A()" << std::endl;
     }
 
-    void const_function() const noexcept
-    {
-        std::cout << "A::const_function()" << std::endl;
-    }
+    // virtual ~A()
+    // {
+    //     std::cout << "~A()" << std::endl;
+    // }
 
-    void function() noexcept
-    {
-        x++;
-        std::cout << "A::function()" << std::endl;
-    }
-    
     int x{0};
 };
 
 struct B : public A {
+    B() : A()
+    {
+        std::cout << "B{}" << std::endl;
+    }
 
+    B(const B& b) : A(b)
+    {
+        std::cout << "B{const B&}" << std::endl;
+    }
+
+    B(B&& b) : A(b)
+    {
+        std::cout << "B{B&&}" << std::endl;
+    }
+
+    B& operator=(const B&)
+    {
+        std::cout << "operator=(const B&)" << std::endl;
+        return *this;
+    }
+
+    B& operator=(B&&)
+    {
+        std::cout << "operator=(B&&)" << std::endl;
+        return *this;
+    }
+
+    ~B()
+    {
+        std::cout << "~B()" << std::endl;
+    }
+
+    // virtual ~B()
+    // {
+    //     std::cout << "~B()" << std::endl;
+    // }
+    
+    int y{0};
 };
 
 struct C {
- std::vector<A> maca{1};
- const A& get_rand() const
- {
-     return maca.front();
- }
+    const A& get_rand() const
+    {
+        return maca.front();
+    }
 
- A& get_rand()
- {
-     return maca.front();
- }
+    A& get_rand()
+    {
+        return maca.front();
+    }
+
+    std::vector<A> maca{1};
 };
 
 A foo()
@@ -78,20 +110,32 @@ A goo()
     return a;
 }
 
-A hoo()
-{
-    auto a = A{};
-    a.function();
-    return a;
-}
-
 int main()
 {
-    auto c = C{};
+    {
+        std::cout << "constructors mechanics: " << std::endl; 
+        auto a = A{};
+        auto b = A{};
 
-    auto a = c.get_rand();
+        std::cout << "this is copy:" << std::endl;
+        auto c = a;
 
-    a.x = 5;
+        std::cout << "this is move:" << std::endl;
+        auto d = std::move(a);
+
+        std::cout << "this is copy assing:" << std::endl;
+        b = c;
+
+        std::cout << "this is move assing:" << std::endl;
+        c = A{};
+        
+        std::cout << "this is swap:" << std::endl;
+        std::swap(b,c);
+    }
+
+    {
+        auto b = B{};
+    }
 
     return 0;
 }
