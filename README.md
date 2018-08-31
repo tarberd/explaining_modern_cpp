@@ -2,5 +2,5 @@
 Brief explanation of modern cpp bulshitery
 
 Please read:
-[](https://en.cppreference.com/w/)
-[](https://isocpp.github.io/CppCoreGuidelines/)
+[cppreference](https://en.cppreference.com/w/)
+[CppCoreGuidelines](https://isocpp.github.io/CppCoreGuidelines/)
