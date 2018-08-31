@@ -85,6 +85,28 @@ struct B : public A {
 };
 
 struct C {
+    C() = default;
+
+    C(const C&) = default;
+
+    C(C&&) = default;
+
+    C& operator=(const C&) = default;
+
+    C& operator=(C&&) = default;
+
+    C(const std::vector<A>& vec):
+        maca{vec}
+    {
+        std::cout << "C(const std::vector<A>&)" << std::endl;
+    }
+
+    C(std::vector<A>&& vec):
+        maca{std::move(vec)}
+    {
+        std::cout << "C(std::vector<A>&&)" << std::endl;
+    }
+
     const A& get_rand() const
     {
         return maca.front();
@@ -135,6 +157,10 @@ int main()
 
     {
         auto b = B{};
+    }
+
+    {
+        auto c = C{{A{},A{},A{}}};
     }
 
     return 0;
